@@ -71,17 +71,12 @@ When using the multi-room feature, there might be devices that are out of sync w
 To sync audio across your fleet of balenaSound devices we use [Snapcast](https://github.com/badaix/snapcast) which has a typical deviation of less than 0.2ms. Snapcast is extremely stable so it’s not very likely that software is at fault. The most likely explanation for your devices being out of sync is due to the differences in audio processing after it goes out of the Pi and into the speakers. Every speaker is different; differences in audio circuitry and digital processing can result in a device taking a few milliseconds longer than another to actually output the audio. TV's are known for adding noticeable delays when using them as "speakers".
 
 ### Solution
-Snapcast has an option that allows us to compensate for this short delays on devices. This feature however is currently not implemented on the `master` branch of balenaSound as it hasn't been toroughly tested. You can still try it out though and with enough feedback we will be merging it into the main branch.
+Snapcast has an option that allows us to compensate for this short delays on devices.
+To use it:
 
-To test:
+On your balena dashboard, navigate to the **device** that you notice is behind (the one that is late or more delayed) and add a `Device environment variable` (`Device variables` on the side bar). Name the variable `DEVICE_LATENCY` and assign it a value in msec. You will need to find out the exact value for yourself, `300` (msec) is a good starting point.
 
-1. Download the updated code from https://github.com/balenalabs/balena-sound/tree/snapclient-latency
-
-2. Push the new branch to your devices using `balena push <appName>` (or using `git` if that is how you initially deployed)
-
-3. On your balena dashboard, navigate to the **device** that you notice is behind (the one that is late or more delayed) and add a `Device environment variable` (`Device variables` on the side bar). Name the variable `DEVICE_LATENCY` and assign it a value in msec. You will need to find out the exact value for yourself, `300` (msec) is a good starting point.
-
-4. Wait for your device to reboot, and test again. You might have to adjust the latency value a couple of times until you find one that works.
+Wait for your device to reboot, and test it. You might have to adjust the latency value a couple of times until you find one that works.
 
 When creating the environment variable make sure you define it **only** for the device you hear is lagging behind. If you define the variable from the application screen you will most likely do it fleet-wide which defeats the purpose.
 
